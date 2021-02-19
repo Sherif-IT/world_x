@@ -1,0 +1,79 @@
+@startuml 
+
+package controlleur{
+class Manageur<<singleton>>{
+-List cityes
+-List countries
+-Manageur instance
++getInstance(): Manageur
++getInfosCities():String
++getInfosCages():String
+	}
+}
+package vue{
+class Main<<vue>>{
++infosCities()
++infosCountries()
+}
+}
+Main ..> Manageur
+
+package model{
+class City{
+- int id
+- String name
+- Country country
+- String district
+-String info
+
+
+}
+
+class Country{
+-int code
+-String  capital 
+- String  code
+- String code2
+-String name
+}
+}
+City o--"1" Country
+controlleur*-- model 
+package stockage{
+interface Dao<T>{
++lireTous():List<T>
++inserer(T)
+	}
+class DaoFactory<<abstract>>{
++getDaoFactory(int):DaoFactory	
++getCityDao():Dao
++getCountryDao():Dao
+	
+	
+}
+
+class FichierFactory{
+}
+class MySqlDbFactory{
+}
+DaoFactory<|--FichierFactory
+DaoFactory<|--MySqlDbFactory
+class MySqlCityDao{
+}
+class MySqlCountryDao{
+}
+class FichierCityDao{}
+class FichierCountryDao{}
+MySqlCityDao ..|> Dao
+MySqlCountryDao ..|> Dao
+FichierCityDao ..|> Dao
+FichierCountryDao  ..|> Dao
+FichierFactory-->FichierCityDao
+FichierFactory-->FichierCountryDao
+
+MySqlDbFactory-->MySqlCountryDao
+MySqlDbFactory-->MySqlCityDao
+}
+stockage <--controlleur
+stockage --> model
+@enduml 
